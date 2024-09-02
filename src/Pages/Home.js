@@ -6,14 +6,17 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import WeightSubmit from "../components/WeightSubmit"
 import WeightChart from "../components/WeightChart";
+import Header from '../components/Header'
+import StatCard from '../components/StatCard'
+const apiUrl = process.env.REACT_APP_JSON_SERVER_URL;
 
 const Home = () => {
   const [weights, setWeights] = useState([]);
 
   function getWeights() {
-    axios.get("/weights.json").then((res) => {
-        setWeights(res.data.weights);
-        console.log(res.data.wights);
+    axios.get(`${apiUrl}/weights`).then((res) => {
+        setWeights(res.data);
+        console.log(res.data);
     });
 }
   useEffect(() => {
@@ -25,24 +28,13 @@ const Home = () => {
   return (
     <div>
       <h1 className="text-center">Home</h1>
-      <WeightSubmit />
-      <WeightChart data={weights} />
-      <br />
-      <Row xs={1} md={2} className="g-4">
-        {weights &&
-          weights.map((book, id) => (
-            <Col key={id}>
-
-              <Card key={id}>
-
-                <Card.Body>
-                  <Card.Title>{book.title}</Card.Title>
-                  <Card.Text>{book.description}</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
+      <Row md={3}>
+        <Col><StatCard title={"Total Lost"} value={"3kg"}/></Col>
+        <Col><StatCard title={"Lost this week"} value={"3kg"}/></Col>
+        <Col><StatCard title={"Lost this week"} value={"3kg"}/></Col>
       </Row>
+      <WeightChart data={weights} />
+     
     </div>
   );
 };

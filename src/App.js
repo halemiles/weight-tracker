@@ -1,23 +1,49 @@
 // src/App.js
 import React from 'react';
-import Home from './Pages/Home';
+import Header from './components/Header';
 import Weights from './Pages/Weights';
-
+import WeightEdit from './Pages/WeightEdit';
+import WeightCreate from './Pages/CreateWeight';
+import Home from './Pages/Home';
 import {
   createBrowserRouter,
-  RouterProvider,
+  RouterProvider
 } from "react-router-dom";
+import { Container } from 'react-bootstrap';
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+  },
+  {
+    path: "/home",
+    element: <Home />,
+  },
+  {
+    path: "/weights",
+    element: <Weights />,
+  },
+  {
+    path: "/weights/:id",
+    element: <WeightEdit  />,
+  },
+  ,
+  {
+    path: "/weights/create",
+    element: <WeightCreate  />,
+  }
+]);
+
 function App() {
 
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <div>Hello world!</div>,
-    },
-  ]);
+ 
   return (
     <div className="App">
-      <Home />
+      <Container>
+        <Header />
+        <RouterProvider router={router} />
+      </Container>
     </div>
   );
 }
