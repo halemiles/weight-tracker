@@ -17,18 +17,26 @@ const Home = () => {
   const [weeklyLoss,setWeeklyLoss] = useState("0 kg");
   const [totalLoss, setTotalLoss] = useState("0 kg");
 
+  const populateCards = (data) => {
+    const weeklyLoss = getWeightLossSinceSunday(data);
+        setWeeklyLoss(`${weeklyLoss?.weightLoss ?? 0} kg`);
 
+        const totalLoss = getTotalWeightLoss(data);
+        setTotalLoss(`${totalLoss?.totalWeightLoss ?? 0} kg`);
+  }
 
   function getWeights() {
     axios.get(`${apiUrl}/weights`).then((res) => {
         setWeights(res.data);
+        populateCards(res.data);
+        
     });
 }
   useEffect(() => {
+    console.log("api url",apiUrl);
     getWeights();
     console.log(weights);
-    setWeeklyLoss(`${getWeightLossSinceSunday(weights)?.weightLoss ?? 0} kg`);
-    setTotalLoss(`${getTotalWeightLoss(weights)?.totalWeightLoss ?? 0} kg`);
+    populateCards(weights);
   }, []);
 
   return (
