@@ -1,11 +1,18 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-
+import getTodayDate from '../logic/GetTodayDateFormatted';
+import Col from "react-bootstrap/Col";
+import Row from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+const apiUrl = process.env.REACT_APP_JSON_SERVER_URL;
 const WeightSubmit = () => {
 
   const [weights, setWeights] = useState([]);
+  
   const [formData, setFormData] = useState({
-    date: '',
+    date: getTodayDate(),
     weight: ''
 });
     const getWeights = () => {
@@ -15,8 +22,8 @@ const WeightSubmit = () => {
     }
     const submitWeight = (date, weight) => {
         console.log(date,weight);
-       axios.post('http://localhost:3001/weights', {
-        data: {weight: weight, date:date}
+       axios.post(`${apiUrl}/weights`, {
+        weight: weight, date:date
        })
     };
 // Handle input changes
@@ -52,33 +59,46 @@ const handleSubmit = (e) => {
 
     return(
         <div>
-            Submit form
-            <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="date">Date:</label>
-                <input
-                    type="date"
-                    id="date"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-            <div>
-                <label htmlFor="weight">Weight:</label>
-                <input
-                    type="number"
-                    id="weight"
-                    name="weight"
-                    value={formData.weight}
-                    onChange={handleChange}
-                    required
-                    step="0.1"
-                />
-            </div>
-            <button type="submit">Submit</button>
-        </form>
+            <Form onSubmit={handleSubmit}>
+            <Container>
+                <Row>
+                    <Col>
+                        <Form.Label htmlFor="date">Date:</Form.Label>
+                    </Col>
+                    <Col>
+                        <Form.Control
+                            type="date"
+                            id="date"
+                            name="date"
+                            value={formData.date}
+                            onChange={handleChange}
+                            required
+                        />
+                    </Col>
+                </Row>
+                <Row>
+                <Col>
+                    <Form.Label htmlFor="weight">Weight:</Form.Label>
+                </Col>
+                <Col>
+                    <Form.Control
+                        type="number"
+                        id="weight"
+                        name="weight"
+                        value={formData.weight}
+                        onChange={handleChange}
+                        required
+                        step="0.1"
+                    />
+                </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Button type="submit">Submit</Button>
+                    </Col>
+                </Row>
+            </Container>
+        </Form>
         </div>
     )
 }

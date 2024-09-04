@@ -33,8 +33,8 @@ const Weights = () => {
         {weights &&
           weights.map((weight, id) => (
             <tr key={id}>
-              <td>{weight.data.weight}</td>
-              <td>{weight.data.date}</td>
+              <td>{weight.weight}</td>
+              <td>{weight.date}</td>
               <td><Link to={`/weights/${weight.id}`}>Edit</Link></td>
             </tr>
           ))}

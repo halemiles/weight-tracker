@@ -43,10 +43,11 @@ const Home = () => {
     <div>
       <h1 className="text-center">Home</h1>
       <Row md={3}>
+        <Col><WeightSubmit dateOverride={Date.now()} /></Col>
         <Col><StatCard title={"Since Sunday"} value={weeklyLoss}/></Col>
         <Col><StatCard title={"Total loss"} value={totalLoss}/></Col>
-        <Col><StatCard title={"Lost this week"} value={"3kg"}/></Col>
       </Row>
+      
       <WeightChart data={weights} />
 
     </div>
