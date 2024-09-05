@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect,useState} from 'react';
 import axios from 'axios';
 import getTodayDate from '../logic/GetTodayDateFormatted';
 import Col from "react-bootstrap/Col";
@@ -7,24 +7,44 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 const apiUrl = process.env.REACT_APP_JSON_SERVER_URL;
-const WeightSubmit = () => {
+const WeightSubmit = ({id}) => {
 
-  const [weights, setWeights] = useState([]);
-  
+  const [weight, setWeight] = useState([]);
+
+  useEffect(() => {
+    getWeight(id);
+  },[])
   const [formData, setFormData] = useState({
     date: getTodayDate(),
-    weight: ''
-});
-    const getWeights = () => {
-        axios.get("/weights.json").then((res) => {
-            setWeights(res.data.books);
-        });
+    weight: 0
+    });
+    const getWeight = (weightId) => {
+        console.log("Getting weight for ID:",weightId);
+        if(weightId){
+            axios.get(`${apiUrl}/weights/${weightId}`).then((res) => {
+                console.log("Weight value",res);
+                setFormData({
+                    ...formData,
+                    date: res.data.date,
+                    weight: res.data.weight
+                });
+            });
+        }
     }
     const submitWeight = (date, weight) => {
         console.log(date,weight);
-       axios.post(`${apiUrl}/weights`, {
-        weight: weight, date:date
-       })
+        if(id){
+            axios.put(`${apiUrl}/weights/${id}`, {
+                weight: weight, date:date
+               })
+        }
+        else
+        {
+            axios.post(`${apiUrl}/weights`, {
+                weight: weight, date:date
+               })
+        }
+
     };
 // Handle input changes
 const handleChange = (e) => {

@@ -26,10 +26,10 @@ const Home = () => {
   }
 
   function getWeights() {
-    axios.get(`${apiUrl}/weights`).then((res) => {
+    axios.get(`${apiUrl}/weights?_sort=weight`).then((res) => {
         setWeights(res.data);
         populateCards(res.data);
-        
+
     });
 }
   useEffect(() => {
@@ -47,7 +47,7 @@ const Home = () => {
         <Col><StatCard title={"Since Sunday"} value={weeklyLoss}/></Col>
         <Col><StatCard title={"Total loss"} value={totalLoss}/></Col>
       </Row>
-      
+
       <WeightChart data={weights} />
 
     </div>

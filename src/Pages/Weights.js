@@ -10,7 +10,7 @@ const Weights = () => {
   const [weights, setWeights] = useState([]);
 
   function getWeights() {
-    axios.get(`${apiUrl}/weights`).then((res) => {
+    axios.get(`${apiUrl}/weights?_sort=weight`).then((res) => {
         setWeights(res.data);
         console.log(res.data);
     });
@@ -26,10 +26,12 @@ const Weights = () => {
       <h1 className="text-center">Weights</h1>
       <br />
       <Table xs={1} md={2} className="g-4">
-        
+        <thead>
         <th>Weight</th>
         <th>Date</th>
         <th></th>
+        </thead>
+        <tbody>
         {weights &&
           weights.map((weight, id) => (
             <tr key={id}>
@@ -38,6 +40,7 @@ const Weights = () => {
               <td><Link to={`/weights/${weight.id}`}>Edit</Link></td>
             </tr>
           ))}
+          </tbody>
       </Table>
     </div>
   );
