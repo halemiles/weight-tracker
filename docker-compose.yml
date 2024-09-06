@@ -1,9 +1,28 @@
----
+version: '3'
 
 services:
-  api:
-    image: codfish/json-server:0.17.3
+  # Service for the React app
+  react-app:
+    container_name: react-app
+    build:
+      context: .  # Assuming Dockerfile is in the root directory
     ports:
-      - 3002:3000
+      - "3000:3000"  # Expose React app on port 3000
     volumes:
-      - ./public/weights.json:/app/db.json
+      - ./src:/app/src  # Hot-reload React app by mounting the source directory
+      - /app/node_modules  # Avoid overriding node_modules with a volume
+    command: npm start  # Start the React app
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # For hot-reloading inside Docker (optional, improves file watching on certain platforms)
+
+  # Service for json-server
+  json-server:
+    container_name: json-server
+    image: clue/json-server  # Uses the official json-server Docker image
+    ports:
+      - "3002:3000"  # Map port 3002 on host to port 3000 in the container
+    volumes:
+      - ./public/weights.json:/app/db.json  # Bind weights.json to db.json in the container
+    command: json-server --watch /app/db.json --port 3000  # Run json-server in watch mode
+    environment:
+      - NODE_ENV=development  # Optional: Set the environment to development
