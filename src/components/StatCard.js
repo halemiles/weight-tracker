@@ -1,12 +1,12 @@
 import Card from 'react-bootstrap/Card';
 
-const StatCard = ({title,value}) => {
+const StatCard = ({title,content}) => {
     return(
         <Card style={{ width: '18rem' }} >
         <Card.Body >
             <Card.Title className="text-center">{title}</Card.Title>
             <Card.Text className="text-center" >
-                {value}
+                {content}
             </Card.Text>
         </Card.Body>
         </Card>

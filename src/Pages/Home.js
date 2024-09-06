@@ -44,8 +44,8 @@ const Home = () => {
       <h1 className="text-center">Home</h1>
       <Row md={3}>
         <Col><WeightSubmit dateOverride={Date.now()} /></Col>
-        <Col><StatCard title={"Since Sunday"} value={weeklyLoss}/></Col>
-        <Col><StatCard title={"Total loss"} value={totalLoss}/></Col>
+        <Col><StatCard title={"Since Sunday"} content={weeklyLoss}/></Col>
+        <Col><StatCard title={"Total loss"} content={totalLoss}/></Col>
       </Row>
 
       <WeightChart data={weights} />
