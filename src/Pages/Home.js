@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import WeightSubmit from "../components/WeightSubmit"
 import WeightChart from "../components/WeightChart";
-import Header from '../components/Header'
 import StatCard from '../components/StatCard'
 import {getWeightLossSinceSunday} from '../logic/WeightCalculations'
 import { getTotalWeightLoss } from "../logic/TotalWeightLossCalculation";
@@ -26,10 +23,10 @@ const Home = () => {
   }
 
   function getWeights() {
-    axios.get(`${apiUrl}/weights?_sort=weight`).then((res) => {
+    axios.get(`${apiUrl}/weights?_sort=date`).then((res) => {
         setWeights(res.data);
         populateCards(res.data);
-
+        console.log(res);
     });
 }
   useEffect(() => {

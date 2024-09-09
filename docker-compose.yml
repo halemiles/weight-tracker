@@ -23,3 +23,5 @@ services:
     volumes:
       - ./public/data:/app  # Bind weights.json to db.json in the container
     command: json-server /app/db.json --watch # Run json-server in watch mode
+    environment:
+      NO_CORS: true
