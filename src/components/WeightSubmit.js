@@ -1,23 +1,50 @@
-import React, {useState} from 'react';
+import React, {useEffect,useState} from 'react';
 import axios from 'axios';
+import getTodayDate from '../logic/GetTodayDateFormatted';
+import Col from "react-bootstrap/Col";
+import Row from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+const apiUrl = process.env.REACT_APP_JSON_SERVER_URL;
+const WeightSubmit = ({id}) => {
 
-const WeightSubmit = () => {
+  const [weight, setWeight] = useState([]);
 
-  const [weights, setWeights] = useState([]);
+  useEffect(() => {
+    getWeight(id);
+  },[])
   const [formData, setFormData] = useState({
-    date: '',
-    weight: ''
-});
-    const getWeights = () => {
-        axios.get("/weights.json").then((res) => {
-            setWeights(res.data.books);
-        });
+    date: getTodayDate(),
+    weight: 0
+    });
+    const getWeight = (weightId) => {
+        console.log("Getting weight for ID:",weightId);
+        if(weightId){
+            axios.get(`${apiUrl}/weights/${weightId}`).then((res) => {
+                console.log("Weight value",res);
+                setFormData({
+                    ...formData,
+                    date: res.data.date,
+                    weight: res.data.weight
+                });
+            });
+        }
     }
     const submitWeight = (date, weight) => {
         console.log(date,weight);
-       axios.post('http://localhost:3001/weights', {
-        data: {weight: weight, date:date}
-       })
+        if(id){
+            axios.put(`${apiUrl}/weights/${id}`, {
+                weight: weight, date:date
+               })
+        }
+        else
+        {
+            axios.post(`${apiUrl}/weights`, {
+                weight: weight, date:date
+               })
+        }
+
     };
 // Handle input changes
 const handleChange = (e) => {
@@ -52,33 +79,46 @@ const handleSubmit = (e) => {
 
     return(
         <div>
-            Submit form
-            <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="date">Date:</label>
-                <input
-                    type="date"
-                    id="date"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-            <div>
-                <label htmlFor="weight">Weight:</label>
-                <input
-                    type="number"
-                    id="weight"
-                    name="weight"
-                    value={formData.weight}
-                    onChange={handleChange}
-                    required
-                    step="0.1"
-                />
-            </div>
-            <button type="submit">Submit</button>
-        </form>
+            <Form onSubmit={handleSubmit}>
+            <Container>
+                <Row>
+                    <Col>
+                        <Form.Label htmlFor="date">Date:</Form.Label>
+                    </Col>
+                    <Col>
+                        <Form.Control
+                            type="date"
+                            id="date"
+                            name="date"
+                            value={formData.date}
+                            onChange={handleChange}
+                            required
+                        />
+                    </Col>
+                </Row>
+                <Row>
+                <Col>
+                    <Form.Label htmlFor="weight">Weight:</Form.Label>
+                </Col>
+                <Col>
+                    <Form.Control
+                        type="number"
+                        id="weight"
+                        name="weight"
+                        value={formData.weight}
+                        onChange={handleChange}
+                        required
+                        step="0.1"
+                    />
+                </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Button type="submit">Submit</Button>
+                    </Col>
+                </Row>
+            </Container>
+        </Form>
         </div>
     )
 }
